@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TressTaleByAy - Admin Panel</title>
+    <link rel="stylesheet" href="../CSS/admin-styles.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-page" id="loginPage">
+        <div class="login-container">
+            <div class="login-box">
+                <h1 class="login-title">✨ TressTaleByAy Admin</h1>
+                <p class="login-subtitle">Secure Access Only</p>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="login-btn">Login</button>
+                    <p class="demo-creds">Demo: admin / admin123</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-content">
+                <h1 class="admin-logo">TressTaleByAy Admin</h1>
+                <div class="admin-user-info">
+                    <span id="adminUsername">Admin</span>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <div class="admin-container">
+            <aside class="admin-sidebar">
+                <nav class="admin-nav">
+                    <button class="nav-item active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+                    <button class="nav-item" onclick="switchTab('products')">📦 Products</button>
+                    <button class="nav-item" onclick="switchTab('add-product')">➕ Add Product</button>
+                    <button class="nav-item" onclick="switchTab('orders')">🛒 Orders</button>
+                    <button class="nav-item" onclick="switchTab('analytics')">📈 Analytics</button>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-content" id="dashboard-tab">
+                    <h2>Dashboard Overview</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total Products</h3>
+                            <p class="stat-number" id="totalProducts">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Wigs</h3>
+                            <p class="stat-number" id="totalWigs">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Perfumes</h3>
+                            <p class="stat-number" id="totalPerfumes">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Cart Items</h3>
+                            <p class="stat-number" id="cartItems">0</p>
+                        </div>
+                    </div>
+                    <div class="recent-activity">
+                        <h3>Recent Updates</h3>
+                        <p>Monitor product updates and changes from this dashboard.</p>
+                    </div>
+                </div>
+
+                <!-- Products Tab -->
+                <div class="tab-content" id="products-tab" style="display: none;">
+                    <h2>Manage Products</h2>
+                    <div class="product-filters">
+                        <button class="filter-btn active" onclick="filterAdminProducts('all')">All</button>
+                        <button class="filter-btn" onclick="filterAdminProducts('wigs')">Wigs</button>
+                        <button class="filter-btn" onclick="filterAdminProducts('perfumes')">Perfumes</button>
+                    </div>
+                    <div class="admin-products-grid" id="adminProductsGrid">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Add Product Tab -->
+                <div class="tab-content" id="add-product-tab" style="display: none;">
+                    <h2>Add New Product</h2>
+                    <form class="product-form" onsubmit="handleAddProduct(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prodName">Product Name:</label>
+                                <input type="text" id="prodName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodCategory">Category:</label>
+                                <select id="prodCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="wigs">Wigs</option>
+                                    <option value="perfumes">Perfumes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prodPrice">Price (₦):</label>
+                                <input type="number" id="prodPrice" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodType">Type:</label>
+                                <input type="text" id="prodType" placeholder="e.g., Lace Front, Full Wig">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prodDescription">Description:</label>
+                            <textarea id="prodDescription" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prodImage">Image URL:</label>
+                            <input type="text" id="prodImage" placeholder="../IMG/image.JPG" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prodBadge">Badge (Optional):</label>
+                            <input type="text" id="prodBadge" placeholder="e.g., Best Seller, New">
+                        </div>
+
+                        <button type="submit" class="submit-btn">Add Product</button>
+                    </form>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="tab-content" id="orders-tab" style="display: none;">
+                    <h2>Orders</h2>
+                    <div class="orders-list" id="ordersList">
+                        <p class="no-data">No orders yet</p>
+                    </div>
+                </div>
+
+                <!-- Analytics Tab -->
+                <div class="tab-content" id="analytics-tab" style="display: none;">
+                    <h2>Analytics</h2>
+                    <div class="analytics-container">
+                        <div class="analytics-card">
+                            <h3>Most Viewed Category</h3>
+                            <p id="mostViewed">Wigs</p>
+                        </div>
+                        <div class="analytics-card">
+                            <h3>Average Price (Wigs)</h3>
+                            <p id="avgWigPrice">₦0</p>
+                        </div>
+                        <div class="analytics-card">
+                            <h3>Average Price (Perfumes)</h3>
+                            <p id="avgPerfumePrice">₦0</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Product</h2>
+            <form onsubmit="handleEditProduct(event)">
+                <input type="hidden" id="editProductId">
+                <div class="form-group">
+                    <label for="editName">Product Name:</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPrice">Price (₦):</label>
+                    <input type="number" id="editPrice" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description:</label>
+                    <textarea id="editDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editBadge">Badge:</label>
+                    <input type="text" id="editBadge">
+                </div>
+                <button type="submit" class="submit-btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../JSC/admin-script.js"></script>
+</body>
+</html>

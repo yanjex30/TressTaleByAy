@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - TressTaleByAy</title>
+    <link rel="stylesheet" href="./CSS/styles.css">
+    <style>
+        .debug-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #d4a5a5;
+        }
+        .debug-section h3 {
+            margin: 0 0 10px 0;
+            color: #d4a5a5;
+        }
+        .debug-section pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .image-test {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .image-test img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border: 2px solid #d4a5a5;
+            border-radius: 6px;
+        }
+        .image-test .image-item {
+            text-align: center;
+        }
+        .image-test p {
+            font-size: 12px;
+            margin: 5px 0 0 0;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h2>🔧 Debug Dashboard</h2>
+        
+        <div class="debug-section">
+            <h3>File Paths</h3>
+            <p>Current location: <code id="currentPath"></code></p>
+            <p>Image folder relative path: <code>./IMG/</code></p>
+            <p>Script file: <code>./JSC/script.js</code></p>
+        </div>
+
+        <div class="debug-section">
+            <h3>Products Array Check</h3>
+            <pre id="productsCheck"></pre>
+        </div>
+
+        <div class="debug-section">
+            <h3>Sample Images Test</h3>
+            <p>Testing if images can load from ./IMG/ path:</p>
+            <div class="image-test" id="imageTest"></div>
+        </div>
+
+        <div class="debug-section">
+            <h3>LocalStorage Check</h3>
+            <pre id="storageCheck"></pre>
+        </div>
+
+        <div class="debug-section">
+            <h3>Display Products Output</h3>
+            <div id="productsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;"></div>
+        </div>
+    </div>
+
+    <script src="./JSC/script.js"></script>
+    <script>
+        // Debug information
+        document.getElementById('currentPath').textContent = window.location.pathname;
+
+        // Check products array
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('=== DEBUG INFO ===');
+            console.log('Products loaded:', products.length);
+            console.log('First product:', products[0]);
+            console.log('Wigs count:', products.filter(p => p.category === 'wigs').length);
+            console.log('Perfumes count:', products.filter(p => p.category === 'perfumes').length);
+            
+            // Display products check
+            document.getElementById('productsCheck').textContent = 
+                `Total Products: ${products.length}\n` +
+                `Wigs: ${products.filter(p => p.category === 'wigs').length}\n` +
+                `Perfumes: ${products.filter(p => p.category === 'perfumes').length}\n` +
+                `\nFirst Product:\n${JSON.stringify(products[0], null, 2)}`;
+
+            // Test images
+            const imageTest = document.getElementById('imageTest');
+            const testImages = [
+                { name: 'Wig 1', path: './IMG/wig1.JPG' },
+                { name: 'Wig 2', path: './IMG/wig2.JPG' },
+                { name: 'Perfume 1', path: './IMG/0808d7df-8803-4949-a19f-1ea06b01c38c.JPG' }
+            ];
+
+            testImages.forEach(img => {
+                const div = document.createElement('div');
+                div.className = 'image-item';
+                div.innerHTML = `
+                    <img src="${img.path}" alt="${img.name}" onerror="this.style.border='2px solid red'">
+                    <p>${img.name}</p>
+                    <p class="error" style="display:none">Failed to load</p>
+                `;
+                imageTest.appendChild(div);
+            });
+
+            // Check localStorage
+            document.getElementById('storageCheck').textContent =
+                `Products in localStorage: ${localStorage.getItem('tresstaleProducts') ? 'Yes' : 'No'}\n` +
+                `Cart in localStorage: ${localStorage.getItem('tresstaleCart') ? 'Yes' : 'No'}\n` +
+                `\nLocalStorage keys:\n${Object.keys(localStorage).join('\n')}`;
+
+            // Display products on this page
+            const wigsOnly = products.filter(p => p.category === 'wigs').slice(0, 6);
+            displayProducts(wigsOnly);
+        });
+    </script>
+</body>
+</html>
