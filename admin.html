@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TressTaleByAy - Admin Panel</title>
-    <link rel="stylesheet" href="../CSS/admin-styles.css">
+    <link rel="stylesheet" href="./CSS/admin-styles.css">
 </head>
 <body>
     <!-- Login Page -->
@@ -48,6 +48,8 @@
                 <nav class="admin-nav">
                     <button class="nav-item active" onclick="switchTab('dashboard')">📊 Dashboard</button>
                     <button class="nav-item" onclick="switchTab('products')">📦 Products</button>
+                    <button class="nav-item" onclick="switchTab('messages')">💬 Messages</button>
+                    <button class="nav-item" onclick="switchTab('orders')">📋 Orders</button>
                     <button class="nav-item" onclick="switchTab('add-product')">➕ Add Product</button>
                     <button class="nav-item" onclick="switchTab('orders')">🛒 Orders</button>
                     <button class="nav-item" onclick="switchTab('analytics')">📈 Analytics</button>
@@ -171,6 +173,22 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Messages Tab -->
+                <div class="tab-content" id="messages-tab" style="display: none;">
+                    <h2>Contact Messages</h2>
+                    <div class="messages-list" id="messagesList">
+                        <p class="no-data">No messages yet</p>
+                    </div>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="tab-content" id="orders-custom-tab" style="display: none;">
+                    <h2>Customer Orders</h2>
+                    <div class="orders-list" id="ordersCustomList">
+                        <p class="no-data">No orders yet</p>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -203,6 +221,6 @@
         </div>
     </div>
 
-    <script src="../JSC/admin-script.js"></script>
+    <script src="./JSC/admin-script.js"></script>
 </body>
 </html>
