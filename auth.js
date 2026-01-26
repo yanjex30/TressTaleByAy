@@ -1,44 +1,35 @@
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const path = require('path');
+const User = require('../models/user');
 
-// Verify customer token
-const verifyCustomerToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
-  }
-
+// Register (simple)
+router.post('/register', async (req, res) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
-    req.userEmail = decoded.email;
-    next();
-  } catch (err) {
-    res.status(401).json({ error: 'Invalid token' });
-  }
-};
+    const { name, email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+    const exists = await User.findOne({ email });
+    if (exists) return res.status(400).json({ error: 'Email already registered' });
+    const hash = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, passwordHash: hash });
+    await user.save();
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
+    res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
 
-// Verify admin token
-const verifyAdminToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  
-  if (!token) {
-    return res.status(401).json({ error: 'Admin token required' });
-  }
-
+// Login
+router.post('/login', async (req, res) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (decoded.role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
-    req.adminId = decoded.id;
-    req.adminEmail = decoded.email;
-    next();
-  } catch (err) {
-    res.status(401).json({ error: 'Invalid admin token' });
-  }
-};
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+    const ok = await user.verifyPassword(password);
+    if (!ok) return res.status(400).json({ error: 'Invalid credentials' });
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
+    res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
 
-module.exports = { verifyCustomerToken, verifyAdminToken };
+module.exports = router;
