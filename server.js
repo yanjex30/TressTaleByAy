@@ -47,6 +47,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 TressTale Backend running on http://localhost:${PORT}`);
+  console.log(`🚀 TressTale Backend running on https://tresstle-backend.onrender.com:${PORT}`);
   console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
 });
