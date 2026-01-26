@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - TressTale</title>
-        <link rel="stylesheet" href="./CSS/styles.css">
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -192,7 +192,6 @@
 </head>
 <body>
     <div class="auth-container">
-        <script src="./JSC/auth.js"></script>
         <div class="auth-header">
             <h1>🎀 TressTale</h1>
             <p id="headerSubtitle">Login to your account</p>
@@ -252,6 +251,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const API_URL = 'https://tresstle-backend.onrender.com/api';
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            setTimeout(() => {
+                errorEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = message;
+            successEl.style.display = 'block';
         }
 
         function toggleForm() {
