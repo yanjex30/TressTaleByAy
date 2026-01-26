@@ -3,7 +3,7 @@
 // ===========================
 
 const PAYSTACK_PUBLIC_KEY = 'pk_test_your_key'; // Will be set via environment
-const API_BASE_URL = 'http://localhost:5000/api'; // Will change for production
+const API_BASE_URL = 'https://tresstle-backend.onrender.com/api'; // Render backend
 
 // Initialize Paystack payment
 async function initializePayment(email, amount, orderId, orderDetails) {

@@ -251,23 +251,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        const API_URL = 'http://localhost:5000/api';
-
-        function showError(message) {
-            const errorEl = document.getElementById('errorMessage');
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
-            setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 5000);
-        }
-
-        function showSuccess(message) {
-            const successEl = document.getElementById('successMessage');
-            successEl.textContent = message;
-            successEl.style.display = 'block';
         }
 
         function toggleForm() {
