@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TressTaleByAy - Admin Panel</title>
+    <title>TressTale - Admin Panel</title>
     <link rel="stylesheet" href="./CSS/admin-styles.css">
+    <script>
+        // Check if user is admin before loading page
+        const token = localStorage.getItem('customerToken');
+        const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        
+        if (!token || !user || user.role !== 'admin') {
+            alert('Access denied. Admin privileges required.');
+            window.location.href = 'login.html';
+        } else {
+            // Show dashboard directly
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'flex';
+                document.getElementById('adminUsername').textContent = user.fullName;
+            });
+        }
+    </script>
 </head>
 <body>
     <!-- Login Page -->
     <div class="login-page" id="loginPage">
         <div class="login-container">
             <div class="login-box">
-                <h1 class="login-title">✨ TressTaleByAy Admin</h1>
+                <h1 class="login-title">✨ TressTale Admin</h1>
                 <p class="login-subtitle">Secure Access Only</p>
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
@@ -23,7 +40,7 @@
                         <input type="password" id="password" required>
                     </div>
                     <button type="submit" class="login-btn">Login</button>
-                    <p class="demo-creds">Demo: admin / admin123</p>
+                    <p class="demo-creds">Oreoluwa</p>
                 </form>
             </div>
         </div>
@@ -34,7 +51,7 @@
         <!-- Header -->
         <header class="admin-header">
             <div class="admin-header-content">
-                <h1 class="admin-logo">TressTaleByAy Admin</h1>
+                <h1 class="admin-logo">TressTale Admin</h1>
                 <div class="admin-user-info">
                     <span id="adminUsername">Admin</span>
                     <button class="logout-btn" onclick="handleLogout()">Logout</button>
