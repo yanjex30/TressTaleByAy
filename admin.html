@@ -10,15 +10,18 @@
         const token = localStorage.getItem('customerToken');
         const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
         
-        if (!token || !user || user.role !== 'admin') {
-            alert('Access denied. Admin privileges required.');
-            window.location.href = 'login.html';
-        } else {
-            // Show dashboard directly
+        if (token && user && user.role === 'admin') {
+            // Show dashboard directly for authenticated admin
             document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('adminDashboard').style.display = 'flex';
                 document.getElementById('adminUsername').textContent = user.fullName;
+            });
+        } else {
+            // Show admin login form for authentication
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('adminDashboard').style.display = 'none';
             });
         }
     </script>
